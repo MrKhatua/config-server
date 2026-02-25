@@ -6,7 +6,7 @@ spring:
     name: producer-service
 
   datasource:
-    url: jdbc:mysql://localhost:3306/kodewaladb
+    url: jdbc:mysql://localhost:3306/kafka_practice
     username: root
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
