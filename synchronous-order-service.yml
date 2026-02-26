@@ -1,1 +1,61 @@
 
+server:
+  port: 8081
+
+spring:
+  application:
+    name: order-service
+
+  config:
+    import: "configserver:http://localhost:8888"
+
+  profiles:
+    active: dev
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/kafka_practice
+    username: root
+    password: Manoj@123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+    consumer:
+      group-id: order-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+resilience4j:
+  retry:
+    instances:
+      productServiceRetry:
+        max-attempts: 3
+        wait-duration: 2s
+
+  circuitbreaker:
+    instances:
+      productServiceCB:
+        failure-rate-threshold: 50
+        sliding-window-size: 10
+        wait-duration-in-open-state: 10s
+
+logging:
+  level:
+    io.github.resilience4j.retry: DEBUG
+    org.springframework.cloud.openfeign: DEBUG
